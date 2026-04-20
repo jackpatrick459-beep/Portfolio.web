@@ -13,6 +13,11 @@
         <nav>
             <div class="container nav-inner">
                 <div class="logo">Jack <span> Patrick</span></div>
+
+                <button class="nav-toggle" aria-label="open navigation">
+                    <span class="hamburger"></span>
+                </button>
+
                 <ul>
                     <li><a href="#about">About</a></li>
                     <li><a href="#projects">Projects</a></li>
@@ -199,6 +204,28 @@
                 </div>
             </div>
         </section>
+        <script>
+            const navToggle = document.querySelector('.nav-toggle');
+            const navContainer = document.querySelector('nav'); // Targets the <nav> tag directly
+
+            navToggle.addEventListener('click', () => {
+                navContainer.classList.toggle('nav-open');
+                
+                // Debugging: This will show in your F12 console
+                if (navContainer.classList.contains('nav-open')) {
+                    console.log("Menu is now OPEN");
+                } else {
+                    console.log("Menu is now CLOSED");
+                }
+            });
+
+            // Close menu when a link is clicked
+            document.querySelectorAll('nav ul a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navContainer.classList.remove('nav-open');
+                });
+            });
+        </script>
     </body>
     <footer class="main-footer">
         <div class="container footer-inner">

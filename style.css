@@ -49,6 +49,8 @@ nav{
     font-size: 1.2rem;
     font-weight: 700;
     letter-spacing: .5px;
+    z-index: 1001;
+    position: relative;
 }
 .logo span{
     color: var(--accent);
@@ -437,5 +439,84 @@ section{
     .footer-inner {
         flex-direction: column;
         text-align: center;
+    }
+}
+
+
+/* --- 2. DESKTOP ONLY --- */
+@media (min-width: 769px) {
+    .nav-toggle { display: none; }
+    
+    nav ul {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+    }
+}
+
+/* --- 3. MOBILE ONLY (The Fix) --- */
+@media (max-width: 768px) {
+    /* Hide the list by default */
+    nav ul {
+        display: none; 
+        flex-direction: column;
+        position: fixed;
+        inset: 0;
+        background: #0b1020;
+        justify-content: flex-start;
+        padding-top: 100px;
+        align-items: center;
+        overflow-y: auto;
+        z-index: 999;
+        list-style: none;
+    }
+
+    /* Force show when parent NAV has .nav-open */
+    nav.nav-open ul {
+        display: flex !important;
+    }
+
+    .nav-toggle {
+        display: block;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        z-index: 1000; /* Higher than the menu */
+        padding: 10px;
+    }
+
+    /* Hamburger Lines */
+    .hamburger, .hamburger::before, .hamburger::after {
+        content: '';
+        display: block;
+        background: white;
+        height: 2px;
+        width: 25px;
+        transition: all 0.3s ease;
+    }
+    .hamburger::before { transform: translateY(-8px); }
+    .hamburger::after { transform: translateY(6px); }
+
+    /* X Animation */
+    .nav-open .hamburger { background: transparent; }
+    .nav-open .hamburger::before { transform: rotate(45deg) translateY(0); }
+    .nav-open .hamburger::after { transform: rotate(-45deg) translateY(-2px); }
+
+    nav ul li {
+        margin: 1.2rem 0;
+        list-style: none;
+    }
+    nav ul a {
+        font-size: 1.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: white;
+        text-decoration: none;
+    }
+
+    .logo, .nav-toggle{
+        position: relative;
+        z-index: 1000;
     }
 }

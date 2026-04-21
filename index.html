@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial scale=1.0"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>Patrick Jack | Web designer</title>
         <link rel="stylesheet" href="style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,21 +11,21 @@
     </head>
     <body>
         <nav>
-            <div class="container nav-inner">
-                <div class="logo">Jack <span> Patrick</span></div>
+        <div class="container nav-inner">
+            <div class="logo">Jack <span>Patrick</span></div>
 
-                <button class="nav-toggle" aria-label="open navigation">
-                    <span class="hamburger"></span>
-                </button>
+            <button class="nav-toggle" id="menuBtn" aria-label="open navigation">
+            <span class="hamburger"></span>
+            </button>
 
-                <ul>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#projects">Projects</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#stack">Stack</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
+            <ul class="nav-links" id="navMenu">
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#stack">Stack</a></li>
+            <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
         </nav>
         <header class="hero container">
             <div>
@@ -50,11 +50,11 @@
                     </div>
                     <div class="about-stats">
                         <div class="stat-card">
-                            <h4>Freshman</h4>
+                            <h4>3</h4><p>Projects Built</p>
                             <p>CS Student</p>
                         </div>
                         <div class="stat-card">
-                            <h4>Degree</h4>
+                            <h4>6</h4><p>Skills</p>
                             <p>BSC, Computer Science</p>
                         </div>
                     </div>
@@ -205,48 +205,116 @@
             </div>
         </section>
         <script>
-            const navToggle = document.querySelector('.nav-toggle');
-            const navContainer = document.querySelector('nav'); // Targets the <nav> tag directly
+            const menuBtn = document.getElementById("menuBtn");
+            const navMenu = document.getElementById("navMenu");
 
+            menuBtn.addEventListener("click", () => {
+            navMenu.classList.toggle("active");
+            menuBtn.classList.toggle("open");
+            });
+
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const nav = document.querySelector('nav');
+            const navLinks = document.querySelector('nav ul');
+            const links = document.querySelectorAll('nav ul a');
+            const sections = document.querySelectorAll('section, header');
+
+            /* Mobile menu */
             navToggle.addEventListener('click', () => {
-                navContainer.classList.toggle('nav-open');
-                
-                // Debugging: This will show in your F12 console
-                if (navContainer.classList.contains('nav-open')) {
-                    console.log("Menu is now OPEN");
-                } else {
-                    console.log("Menu is now CLOSED");
+            nav.classList.toggle('nav-open');
+            document.body.classList.toggle('menu-lock');
+            });
+
+            /* Close on link click */
+            links.forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('nav-open');
+                document.body.classList.remove('menu-lock');
+            });
+            });
+
+            /* Shrink nav on scroll */
+            window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 20);
+            });
+
+            /* Active section highlight */
+            window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const top = section.offsetTop - 120;
+                const height = section.offsetHeight;
+                if (scrollY >= top && scrollY < top + height) {
+                current = section.getAttribute('id');
                 }
             });
 
-            // Close menu when a link is clicked
-            document.querySelectorAll('nav ul a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navContainer.classList.remove('nav-open');
-                });
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+                }
             });
+            });
+
+            /* Reveal on scroll */
+            const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting){
+                entry.target.classList.add('show');
+                }
+            });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll(
+            '.project-card, .stack-item, .stat-card, .contact-grid, .about-grid'
+            ).forEach(el => {
+            el.classList.add('hidden-reveal');
+            observer.observe(el);
+            });
+
+            /* Counter animation */
+            const counters = document.querySelectorAll('.stat-card h4');
+            counters.forEach(counter => {
+            const text = counter.innerText;
+            const num = parseInt(text);
+            if (!isNaN(num)) {
+                let count = 0;
+                const update = () => {
+                count++;
+                counter.innerText = count;
+                if(count < num) requestAnimationFrame(update);
+                };
+                update();
+            }
+            });
+
+            /* Dynamic year */
+            const year = document.getElementById('year');
+            if(year) year.textContent = new Date().getFullYear();
         </script>
+        <footer class="main-footer">
+            <div class="container footer-inner">
+                <div class="footer-logo">
+                    Jack<span>Patrick</span>
+                </div>
+                
+                <p class="copyright">&copy; <span id="year"></span> Jack Patrick.</p>
+                <script>document.getElementById('year').innerHTML = new Date().getFullYear();</script>
+                
+                <div class="footer-socials">
+                    <a href="https://linkedin.com/in/jack-patrick-304512351" target="_blank" rel="noopener" title="LinkedIn">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn">
+                    </a>
+                    <a href="https://github.com/jackpatrick459-beep" target="_blank" rel="noopener" title="GitHub">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" style="filter: invert(1); opacity: 0.8;">
+                    </a>
+                    <a href="https://figma.com/@jackpatrick459" target="_blank" rel="noopener" title="Figma">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma">
+                    </a>
+                </div>
+            </div>
+        </footer>
     </body>
-    <footer class="main-footer">
-        <div class="container footer-inner">
-            <div class="footer-logo">
-                Jack<span>Patrick</span>
-            </div>
-            
-            <p class="copyright">&copy; <span id="year"></span> Jack Patrick.</p>
-            <script>document.getElementById('year').innerHTML = new Date().getFullYear();</script>
-            
-            <div class="footer-socials">
-                <a href="https://linkedin.com/in/jack-patrick-304512351" target="_blank" rel="noopener" title="LinkedIn">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn">
-                </a>
-                <a href="https://github.com/jackpatrick459-beep" target="_blank" rel="noopener" title="GitHub">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" style="filter: invert(1); opacity: 0.8;">
-                </a>
-                <a href="https://figma.com/@jackpatrick459" target="_blank" rel="noopener" title="Figma">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma">
-                </a>
-            </div>
-        </div>
-    </footer>
 </html>

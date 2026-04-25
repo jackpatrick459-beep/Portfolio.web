@@ -66,20 +66,21 @@
                 <h2 class="section-title">Selected <span>Projects</span></h2>
                 
                 <div class="projects-grid">
-                    <div class="project-card">
-                        <a href="americasda.netlify.app" class="card-link"></a>
-                        <div class="project-img">
-                            <img src="churchwebsite.png" alt="Screenshot of Church website">
-                            </div>
-                        <div class="project-info">
-                            <h3>Church Organization Website</h3>
-                            <p>A responsive platform featuring mobile-ready navigation and custom maps.</p>
-                            <div class="project-tags">
-                                <span>HTML/CSS</span>
-                                <span>Responsive</span>
+                    <a href="americasda.netlify.app" target="_blank" class="project-link">
+                        <div class="project-card">
+                            <div class="project-img">
+                                <img src="churchwebsite.png" alt="Screenshot of Church website">
+                                </div>
+                            <div class="project-info">
+                                <h3>Church Organization Website</h3>
+                                <p>A responsive platform featuring mobile-ready navigation and custom maps.</p>
+                                <div class="project-tags">
+                                    <span>HTML/CSS</span>
+                                    <span>Responsive</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
                     <div class="project-card">
                         <div class="project-img">
@@ -95,19 +96,21 @@
                         </div>
                     </div>
 
-                    <div class="project-card">
-                        <div class="project-img">
-                            <img src="portfoliowebsite.png" alt="Screenshot of Portfolio website">
-                        </div>
-                        <div class="project-info">
-                            <h3>Portfolio Website</h3>
-                            <p>Personal brand showcase with dark mode aesthetics and fluid typography.</p>
-                            <div class="project-tags">
-                                <span>CSS Grid</span>
-                                <span>JavaScript</span>
+                    <a href="#top" class="project-link" onclick="scrollToTop()">
+                        <div class="project-card">
+                            <div class="project-img">
+                                <img src="portfoliowebsite.png" alt="Screenshot of Portfolio website">
+                            </div>
+                            <div class="project-info">
+                                <h3>Portfolio Website</h3>
+                                <p>Personal brand showcase with dark mode aesthetics and fluid typography.</p>
+                                <div class="project-tags">
+                                    <span>CSS Grid</span>
+                                    <span>JavaScript</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -225,18 +228,33 @@
             const navLinks = document.querySelector('nav ul');
             const links = document.querySelectorAll('nav ul a');
             const sections = document.querySelectorAll('section, header');
+            const cards = document.querySelectorAll('.card');
+
+            const cardObserver = new IntersectionObserver((entries)=>{
+                entries.forEach(entry=>{
+                    if (entry.isIntersecting){
+                        entry.target.classList.add('active');
+                    }else{
+                        entry.target.classList.remove('active');
+                    }
+                });
+            },{
+                threshold: 0.3 //card must be 60% visible
+            });
+
+            cards.forEach(card=>{
+                observer.observe(card);
+            })
 
             /* Mobile menu */
             navToggle.addEventListener('click', () => {
             nav.classList.toggle('nav-open');
-            document.body.classList.toggle('menu-lock');
             });
 
             /* Close on link click */
             links.forEach(link => {
             link.addEventListener('click', () => {
                 nav.classList.remove('nav-open');
-                document.body.classList.remove('menu-lock');
             });
             });
 
@@ -269,9 +287,13 @@
             entries.forEach(entry => {
                 if(entry.isIntersecting){
                 entry.target.classList.add('show');
+                entry.target.style.transition= "all 0.3s ease-out";
+                }else{
+                    entry.target.classList.remove('show');
+                    entry.target.style.transition= "all 0.3s ease-in";
                 }
             });
-            }, { threshold: 0.15 });
+            }, { threshold: 0.2 });
 
             document.querySelectorAll(
             '.project-card, .stack-item, .stat-card, .contact-grid, .about-grid'
@@ -295,6 +317,13 @@
                 update();
             }
             });
+
+            function scrollToTop(){
+                window.scrollTo({
+                    top: 0,
+                    behavior:'smooth'
+                })
+            }
 
             /* Dynamic year */
             const year = document.getElementById('year');
